@@ -1,3 +1,4 @@
+import regression_tree
 import dtree_build
 import sys
 import csv
@@ -19,12 +20,16 @@ def main(col_names=None):
             data.append(list(row))
 
     print("Total number of records = ",len(data))
-    tree = dtree_build.buildtree(data, min_gain =0.01, min_samples = 5)
+    #tree = dtree_build.buildtree(data, min_gain =0.01, min_samples = 5)
+    tree = regression_tree.buildtree(data, min_gain =0.005, min_samples = 5)
 
-    dtree_build.printtree(tree, '', col_names)
+    #dtree_build.printtree(tree, '', col_names)
+    regression_tree.printtree(tree, '', col_names)
 
-    max_tree_depth = dtree_build.max_depth(tree)
+    #max_tree_depth = dtree_build.max_depth(tree)
+    max_tree_depth = regression_tree.max_depth(tree)
     print("max number of questions=" + str(max_tree_depth))
+
 
     if len(sys.argv) > 2: # draw option specified
         import dtree_draw

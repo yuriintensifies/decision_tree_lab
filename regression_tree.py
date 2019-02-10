@@ -1,3 +1,4 @@
+
 from math import log
 
 class decisionnode:
@@ -49,7 +50,6 @@ def averagescore(rows):
     return round(total/count, 3)
 
 
-
 # Probability that a randomly placed item will
 # be in the wrong category
 # Using the closed form here:
@@ -93,12 +93,15 @@ def variance(rows):
 def prediction(leaf_labels):
     total = 0
     result = {}
-    for label, count in leaf_labels.items():
-        total += count
-        result[label] = count
+    if type(leaf_labels) != float:
+        for label, count in leaf_labels.items():
+            total += count
+            result[label] = count
+    else:
+        return leaf_labels
 
     for label, val in result.items():
-        result[label] = str(int(result[label]/total * 100))+"%"
+        result[label] = str(int(result[label] / total * 100)) + "%"
 
     return result
 
@@ -152,7 +155,7 @@ def mdclassify(observation, tree):
             return mdclassify(observation, branch)
 
 
-def buildtree(rows, scoref=entropy,
+def buildtree(rows, scoref=variance,
               min_gain=0, min_samples=0):
     if len(rows) == 0:
         return decisionnode()
@@ -190,7 +193,7 @@ def buildtree(rows, scoref=entropy,
         return decisionnode(col=best_criteria[0], value=best_criteria[1],
                             tb=trueBranch, fb=falseBranch)
     else:
-        return decisionnode(results=uniquecounts(rows))
+        return decisionnode(results=averagescore(rows))
 
 
 def max_depth(tree):
